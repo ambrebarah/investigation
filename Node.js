@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
+
 const server = new Server(app);
 
 
@@ -26,7 +27,7 @@ app.get('*', (req, res) => {
 
 app.use(express.json());
 
-app.post('/ajouter-element', upload.single('image'), async (req, res) => {
+app.post('/api/ajouter-element', upload.single('image'), async (req, res) => {
   const { pseudo, contenu } = req.body;
   const image = req.file;
 
@@ -43,7 +44,7 @@ app.post('/ajouter-element', upload.single('image'), async (req, res) => {
   }
 });
 
-app.get('/liste-elements', async (req, res) => {
+app.get('/api/liste-elements', async (req, res) => {
   try {
     const results = await sql`
       SELECT id, pseudo, contenu, date_creation, image FROM elements_enquete
