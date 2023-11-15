@@ -1,26 +1,21 @@
-const express = require('express');
-const mysql = require('mysql2');
-const multer = require('multer');
-const cors = require('cors');
-const http = require('http');
-const socketIO = require('socket.io');
+import { sql } from "@vercel/postgres";
+import express from 'express';
+import multer from 'multer';
+import cors from 'cors';
+import { Server } from 'http';
+import { Server as SocketIO } from 'socket.io';
+import path from 'path';
+
 const app = express();
-const port = 3000;
-const path = require('path');
+const port = process.env.PORT || 3000;
 
 app.use(cors());
-const server = http.createServer(app);
-const io = socketIO(server);
+
+const server = new Server(app);
+const io = new SocketIO(server);
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'kenji',
-  password: 'kenjikun',
-  database: 'kenji'
-});
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -50,68 +45,62 @@ app.get('*', (req, res) => {
 
 app.use(express.json());
 
-app.post('/ajouter-element', upload.single('image'), (req, res) => {
+app.post('/ajouter-element', upload.single('image'), async (req, res) => {
   const { pseudo, contenu } = req.body;
   const image = req.file;
 
-  const ajoutElementQuery = 'INSERT INTO elements_enquete (pseudo, contenu, image) VALUES (?, ?, ?)';
-
-  connection.query(ajoutElementQuery, [pseudo, contenu, image.buffer], (error, results) => {
-    if (error) {
-      console.error('Erreur lors de l\'ajout de l\'élément dans la base de données : ', error);
-      res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'élément dans la base de données.' });
-    } else {
-      console.log('Élément ajouté avec succès dans la base de données.');
-      res.json({ message: 'Élément ajouté avec succès !' });
-    }
-  });
+  try {
+    await sql`
+      INSERT INTO elements_enquete (pseudo, contenu, image)
+      VALUES (${pseudo}, ${contenu}, ${image.buffer})
+    `;
+    console.log('Élément ajouté avec succès dans la base de données.');
+    res.json({ message: 'Élément ajouté avec succès !' });
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout de l\'élément dans la base de données : ', error);
+    res.status(500).json({ message: 'Erreur lors de l\'ajout de l\'élément dans la base de données.' });
+  }
 });
 
-app.get('/liste-elements', (req, res) => {
-  const query = 'SELECT id, pseudo, contenu, date_creation, image FROM elements_enquete';
+app.get('/liste-elements', async (req, res) => {
+  try {
+    const results = await sql`
+      SELECT id, pseudo, contenu, date_creation, image FROM elements_enquete
+    `;
 
-  connection.query(query, (error, results) => {
-    if (error) {
-      console.error('Erreur lors de la récupération des éléments dans la base de données : ', error);
-      res.status(500).json({ message: 'Erreur lors de la récupération des éléments dans la base de données.' });
-    } else {
-      // Organisez les résultats pour les rendre plus faciles à traiter dans le composant React
-      const organizedResults = results.reduce((acc, element) => {
-        const existingElement = acc.find((accElement) => accElement.id === element.id);
-        if (existingElement) {
-          // L'élément existe déjà, ajoutez simplement le commentaire
-          existingElement.comments.push({
-            pseudo: element.comment_pseudo,
-            commentaire: element.commentaire,
-          });
-        } else {
-          // Créez un nouvel élément avec son commentaire
-          const newElement = {
-            id: element.id,
-            pseudo: element.pseudo,
-            contenu: element.contenu,
-            date_creation: element.date_creation,
-            image: element.image ? element.image.toString('base64') : null,
-            comments: [
-              {
-                pseudo: element.comment_pseudo,
-                commentaire: element.commentaire,
-              },
-            ],
-          };
-          acc.push(newElement);
-        }
-        return acc;
-      }, []);
+    const organizedResults = results.reduce((acc, element) => {
+      const existingElement = acc.find((accElement) => accElement.id === element.id);
+      if (existingElement) {
+        existingElement.comments.push({
+          pseudo: element.comment_pseudo,
+          commentaire: element.commentaire,
+        });
+      } else {
+        const newElement = {
+          id: element.id,
+          pseudo: element.pseudo,
+          contenu: element.contenu,
+          date_creation: element.date_creation,
+          image: element.image ? element.image.toString('base64') : null,
+          comments: [
+            {
+              pseudo: element.comment_pseudo,
+              commentaire: element.commentaire,
+            },
+          ],
+        };
+        acc.push(newElement);
+      }
+      return acc;
+    }, []);
 
-      res.json(organizedResults);
-    }
-  });
+    res.json(organizedResults);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des éléments dans la base de données : ', error);
+    res.status(500).json({ message: 'Erreur lors de la récupération des éléments dans la base de données.' });
+  }
 });
 
-
-
-
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Serveur en cours d'exécution sur le port ${port}`);
 });
