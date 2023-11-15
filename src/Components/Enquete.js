@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Tab, Nav, Navbar, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FiMessageSquare } from 'react-icons/fi';
 import pol from '../assets/images/pol.jpg';
 
 function Enquete() {
@@ -53,15 +52,6 @@ function Enquete() {
     marginTop: '1rem',
   };
 
-  const centeredImgContainerStyle = {
-    textAlign: 'center',
-    marginTop: '1rem', // Ajustez selon l'espace souhaité
-  };
-
-  const centeredImgStyle = {
-    width: '50%',
-    margin: 'auto',
-  };
 
   return (
     <div style={enqueteStyle}>
@@ -93,7 +83,7 @@ function Enquete() {
                     à toi de jouer.
                   </div>
                   <Button as={Link} to="/participer" variant="warning" style={centeredButtonStyle}>
-                    Participer à l'enquête <FiMessageSquare />
+                    Participer à l'enquête 
                   </Button>
                 </div>
               </Tab.Pane>
