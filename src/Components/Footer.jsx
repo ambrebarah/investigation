@@ -1,7 +1,6 @@
 // Footer.jsx
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { BiMessageSquare } from 'react-icons/bi'; // Importez l'icône de chat de react-icons
 
 const Footer = ({ onJoinChat }) => {
   const footerStyle = {
@@ -13,10 +12,7 @@ const Footer = ({ onJoinChat }) => {
     width: '100%', // Largeur du pied de page sur toute la largeur
   };
 
-  const handleJoinChat = () => {
-    // Utilisez ici la fonction onJoinChat fournie en tant que propriété
-    onJoinChat();
-  };
+
 
   return (
     <div style={footerStyle}>
