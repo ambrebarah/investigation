@@ -1,13 +1,34 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Courier New', monospace;
+  background-color: black; /* Ajout d'une couleur de fond noire pour toutes les pages */
+  color: yellow; /* Ajout de la couleur de texte jaune pour toutes les pages */
+}
+
+/* Stylisation générale des paragraphes */
+p {
+  font-family: 'Courier New', monospace;
+  margin-bottom: 1rem; /* Ajout de marges en bas pour séparer les paragraphes */
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Courier New', monospace;
+}
+
+/* Animation de machine à écrire */
+.typewriter-text {
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 1px solid white;
+  animation: typing 4s steps(40) both; /* Augmentez la durée à 10s (ou ajustez selon vos besoins) */
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }

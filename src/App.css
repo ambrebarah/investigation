@@ -8,7 +8,6 @@ body, html, ul, li, h1, p {
 body {
   background-color: #000;
   color: #fff;
-  font-family: Arial, sans-serif;
 }
 
 /* En-tête */
@@ -88,4 +87,32 @@ button:hover {
 
 .link:hover {
   background-color: #0056b3;
+}
+
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Animation typewriter */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.typewriter-text {
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+  border-right: 1px solid white;
+  white-space: nowrap;
+  animation: typing 5s steps(40) both; /* Ajustez le nombre d'étapes en fonction de la longueur du texte */
 }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import suspectImage1 from '../assets/images/suspect1.jpg';
 import suspectImage2 from '../assets/images/suspect2.jpg';
 
@@ -21,7 +22,22 @@ const Suspect = () => {
   ];
 
   return (
-    <div style={{ background: 'black', minHeight: '100vh' }}>
+    
+    <div style={{ background: 'black', color: 'yellow', minHeight: '100vh' }}>
+    <Navbar bg="dark" variant="dark" expand="lg" className="mt-0">
+      <Navbar.Brand style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+        Enquête Andronikov
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Nav.Link href="/enquete">Accueil</Nav.Link>
+          <Nav.Link href="/suspect">Suspects</Nav.Link>
+          <Nav.Link href="/participer">Participer</Nav.Link>
+          <Nav.Link href="/listelements">Liste des éléments</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
       <Container>
         <h1 className="mt-4 text-white">Liste des Suspects</h1>
         <Row>

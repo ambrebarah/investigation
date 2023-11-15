@@ -11,7 +11,7 @@ function Accueil() {
   const [erreur, setErreur] = useState('');
 
   const handleDemarrerEnquete = () => {
-    if (codeAcces === 'IWILLFINDYOU') {
+    if (codeAcces === 'iwillfindyou') {
       window.location.href = '/enquete'; // Rediriger l'utilisateur vers la page d'enquête
     } else {
       setErreur('Code d\'accès incorrect. Veuillez réessayer.');
@@ -43,7 +43,7 @@ function Accueil() {
           <Row className="justify-content-center">
             <Col xs={12} sm={8} md={6}>
               <h1 className="text-light">Bienvenue</h1>
-              <p className="text-light">Je suis sous mon meilleur profil aujourd'hui</p>
+              <p className="text-light"><strong>Indice:</strong>Je suis sous mon meilleur profil aujourd'hui</p>
               <Form>
                 <Form.Group controlId="codeAcces" className="mb-3"> {/* Ajoutez une marge en bas (mb-3) */}
                   <Form.Control
