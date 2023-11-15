@@ -3,7 +3,6 @@ import express from 'express';
 import multer from 'multer';
 import cors from 'cors';
 import { Server } from 'http';
-import { Server as SocketIO } from 'socket.io';
 import path from 'path';
 
 const app = express();
@@ -12,32 +11,14 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 
 const server = new Server(app);
-const io = new SocketIO(server);
+
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-const chatRoom = io.of('/chat-room');  // Créer une instance de chat-room
 
-chatRoom.on('connection', (socket) => {
-  console.log('Nouvelle connexion WebSocket');
-
-  socket.on('join', (pseudo) => {
-    console.log(`${pseudo} a rejoint le chat-room`);
-    socket.join('Quelles sont vos hypothèses?');  // Rejoindre la room
-    chatRoom.to('Quelles sont vos hypothèses?').emit('message', { pseudo: 'System', text: `${pseudo} a rejoint le chat` });
-  });
-
-  socket.on('sendMessage', (message) => {
-    chatRoom.to('Quelles sont vos hypothèses?').emit('message', { pseudo: message.pseudo, text: message.text });
-  });
-
-  socket.on('disconnect', () => {
-    console.log('Déconnexion WebSocket');
-  });
-});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
