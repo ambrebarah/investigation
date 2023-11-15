@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 
 // Importez votre image de fond (background)
-import background from '../assets/images/background.jpg'; // Assurez-vous que le chemin soit correct
+import background from '../assets/images/im.jpg'; // Assurez-vous que le chemin soit correct
 
 function Accueil() {
   const [codeAcces, setCodeAcces] = useState('');

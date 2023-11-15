@@ -99,20 +99,15 @@ button:hover {
   }
 }
 
-/* Animation typewriter */
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
 .typewriter-text {
   font-family: 'Courier New', monospace;
   overflow: hidden;
   border-right: 1px solid white;
   white-space: nowrap;
-  animation: typing 5s steps(40) both; /* Ajustez le nombre d'étapes en fonction de la longueur du texte */
+}
+
+
+.typewriter-text::after {
+  content: "\A";
+  white-space: pre;
 }
