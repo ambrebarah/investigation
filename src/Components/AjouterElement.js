@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Navbar, Nav } from 'react-bootstrap';
-import axios from 'axios';
+import { Container, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 function AjouterElement() {
@@ -16,19 +15,24 @@ function AjouterElement() {
       formData.append('contenu', contenu);
       formData.append('image', image);
 
-      const response = await axios.post('http://localhost:3000/ajouter-element', formData);
+      // Envoi de la requête à l'API Vercel avec fetch
+      const response = await fetch('/api/ajouter-element', {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (response && response.data) {
-        console.log('Élément ajouté avec succès', response.data);
+      if (response.ok) {
+        console.log('Élément ajouté avec succès');
         // Rediriger vers la page /listelements
         navigate('/listelements');
       } else {
-        console.error('Erreur lors de l\'ajout de l\'élément: Response data is undefined');
+        console.error('Erreur lors de l\'ajout de l\'élément:', response.statusText);
       }
     } catch (error) {
-      console.error('Erreur lors de l\'ajout de l\'élément', error.response?.data || error.message);
+      console.error('Erreur lors de l\'ajout de l\'élément', error.message);
     }
   };
+
   return (
     <div style={{ background: 'black', color: 'yellow', minHeight: '100vh' }}>
       <Container>
