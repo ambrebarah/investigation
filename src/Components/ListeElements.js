@@ -4,9 +4,7 @@ import { Container, Navbar, Nav, Card, Col } from 'react-bootstrap';
 
 function ListeElements() {
   const [elements, setElements] = useState([]);
-  const [newComment, setNewComment] = useState({});
-  const [pseudo, setPseudo] = useState('');
-  const commentInputRefs = useRef({});
+
 
   useEffect(() => {
     const fetchElements = async () => {
@@ -27,40 +25,6 @@ function ListeElements() {
     return new Date(dateString).toLocaleDateString('fr-FR', options);
   };
 
-  const handleCommentChange = (e, element_id) => {
-    setNewComment((prevComments) => ({
-      ...prevComments,
-      [element_id]: e.target.value,
-    }));
-  };
-
-  const handleCommentSubmit = async (element_id) => {
-    try {
-      const response = await axios.post(`/api/ajouter-commentaire/${element_id}`, {
-        pseudo: pseudo,
-        comment_text: newComment[element_id],
-      });
-
-      const updatedElements = elements.map((element) =>
-        element.id === element_id
-          ? {
-              ...element,
-              comments: [...(element.comments || []), response.data],
-            }
-          : element
-      );
-
-      setElements(updatedElements);
-      setNewComment((prevComments) => ({
-        ...prevComments,
-        [element_id]: '',
-      }));
-      setPseudo('');
-      commentInputRefs.current[element_id].focus();
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout du commentaire', error.response?.data || error.message);
-    }
-  };
 
   return (
     <div style={{ background: 'black', color: 'yellow', minHeight: '100vh' }}>
