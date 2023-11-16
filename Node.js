@@ -10,23 +10,22 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-
 const server = new Server(app);
-
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// Serve les fichiers statiques depuis le dossier client/build
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-
-
+// Route pour renvoyer l'index.html pour toutes les routes inconnues
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
 app.use(express.json());
 
+// Route pour ajouter un élément à la base de données
 app.post('/api/ajouter-element', upload.single('image'), async (req, res) => {
   const { pseudo, contenu } = req.body;
   const image = req.file;
@@ -44,6 +43,7 @@ app.post('/api/ajouter-element', upload.single('image'), async (req, res) => {
   }
 });
 
+// Route pour récupérer la liste des éléments depuis la base de données
 app.get('/api/liste-elements', async (req, res) => {
   try {
     const results = await sql`
@@ -51,6 +51,7 @@ app.get('/api/liste-elements', async (req, res) => {
     `;
 
     const organizedResults = results.reduce((acc, element) => {
+      // Assurez-vous que ces colonnes existent réellement dans votre base de données
       const existingElement = acc.find((accElement) => accElement.id === element.id);
       if (existingElement) {
         existingElement.comments.push({
