@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Container, Navbar, Nav, Card, Col, Form, Button } from 'react-bootstrap';
+import { Container, Navbar, Nav, Card, Col } from 'react-bootstrap';
 
 function ListeElements() {
   const [elements, setElements] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState({});
   const [pseudo, setPseudo] = useState('');
   const commentInputRefs = useRef({});
 
   useEffect(() => {
     const fetchElements = async () => {
       try {
-        const response = await axios.get('/api/liste-elements'); // Utiliser le chemin relatif vers l'API Vercel
+        const response = await axios.get('/api/liste-elements');
         console.log('Données reçues côté front-end :', response.data);
         setElements(response.data);
       } catch (error) {
@@ -28,7 +28,10 @@ function ListeElements() {
   };
 
   const handleCommentChange = (e, element_id) => {
-    setNewComment({ ...newComment, [element_id]: e.target.value });
+    setNewComment((prevComments) => ({
+      ...prevComments,
+      [element_id]: e.target.value,
+    }));
   };
 
   const handleCommentSubmit = async (element_id) => {
@@ -37,11 +40,21 @@ function ListeElements() {
         pseudo: pseudo,
         comment_text: newComment[element_id],
       });
+
       const updatedElements = elements.map((element) =>
-        element.id === element_id ? { ...element, comments: [...(element.comments || []), response.data] } : element
+        element.id === element_id
+          ? {
+              ...element,
+              comments: [...(element.comments || []), response.data],
+            }
+          : element
       );
+
       setElements(updatedElements);
-      setNewComment({ ...newComment, [element_id]: '' });
+      setNewComment((prevComments) => ({
+        ...prevComments,
+        [element_id]: '',
+      }));
       setPseudo('');
       commentInputRefs.current[element_id].focus();
     } catch (error) {
