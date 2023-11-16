@@ -5,19 +5,20 @@ import { Container, Navbar, Nav, Card, Col, Form, Button } from 'react-bootstrap
 function ListeElements() {
   const [elements, setElements] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [pseudo, setPseudo] = useState('');
+  const [pseudo, setPseudo] = useState(''); // Nouvelle variable d'état pour le pseudo
   const commentInputRefs = useRef({});
 
   useEffect(() => {
     const fetchElements = async () => {
-      try {
-        const response = await axios.get('/api/liste-elements'); // Utiliser le chemin relatif vers l'API Vercel
-        console.log('Données reçues côté front-end :', response.data);
-        setElements(response.data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des éléments', error);
-      }
-    };
+        try {
+          const response = await axios.get('http://localhost:3000/liste-elements');
+          console.log('Données reçues côté front-end :', response.data);
+          setElements(response.data);
+        } catch (error) {
+          console.error('Erreur lors de la récupération des éléments', error);
+        }
+      };
+      
 
     fetchElements();
   }, []);
@@ -33,8 +34,8 @@ function ListeElements() {
 
   const handleCommentSubmit = async (element_id) => {
     try {
-      const response = await axios.post(`/api/ajouter-commentaire/${element_id}`, {
-        pseudo: pseudo,
+      const response = await axios.post(`http://localhost:3000/ajouter-commentaire/${element_id}`, {
+        pseudo: pseudo, // Utilisation du pseudo saisi par l'utilisateur
         comment_text: newComment[element_id],
       });
       const updatedElements = elements.map((element) =>
@@ -42,7 +43,7 @@ function ListeElements() {
       );
       setElements(updatedElements);
       setNewComment({ ...newComment, [element_id]: '' });
-      setPseudo('');
+      setPseudo(''); // Réinitialise le pseudo après avoir soumis le commentaire
       commentInputRefs.current[element_id].focus();
     } catch (error) {
       console.error('Erreur lors de l\'ajout du commentaire', error.response?.data || error.message);
@@ -52,7 +53,18 @@ function ListeElements() {
   return (
     <div style={{ background: 'black', color: 'yellow', minHeight: '100vh' }}>
       <Navbar bg="dark" variant="dark" expand="lg" className="mt-0">
-        {/* ... (le reste du code n'a pas changé) */}
+        <Navbar.Brand style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+          Enquête Andronikov
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="/enquete">Accueil</Nav.Link>
+            <Nav.Link href="/suspect">Suspects</Nav.Link>
+            <Nav.Link href="/participer">Participer</Nav.Link>
+            <Nav.Link href="/listelements">Liste des éléments</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
 
       <Container>
