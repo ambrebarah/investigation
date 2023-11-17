@@ -32,3 +32,15 @@ code {
     width: 100%;
   }
 }
+
+/* Media query pour la réactivité */
+@media only screen and (max-width: 600px) {
+  /* Ajoutez des styles spécifiques pour les écrans de petite taille ici */
+  body {
+    font-size: 14px; /* Ajustez la taille de la police pour les petits écrans */
+  }
+
+  .typewriter-text {
+    font-size: 16px; /* Ajustez la taille de la police pour les petits écrans */
+  }
+}
