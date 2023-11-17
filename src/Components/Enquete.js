@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Tab, Nav, Navbar, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import pol from '../assets/images/pol.jpg';
+import '../index.css';
 
 function Enquete() {
   const enqueteStyle = {
@@ -30,27 +31,29 @@ function Enquete() {
     fontSize: '2rem',
     fontWeight: 'bold',
   };
-
+  
   const sectionHeadingStyle = {
     fontFamily: 'serif',
     fontSize: '2rem',
     fontStyle: 'bold',
     textAlign: 'center',
   };
-
+  
   const centeredParagraphStyle = {
     width: '100%',
     margin: 'auto',
     textAlign: 'center',
     marginBottom: '1rem', // Ajoute une marge basse
   };
-
+  
   const centeredButtonStyle = {
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: '1rem',
   };
+  
+  
 
 
   return (
